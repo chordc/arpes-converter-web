@@ -24,12 +24,6 @@ Live Demo: https://your-demo-link.com
 * `.zip` → `.npz`
 * `.npz` → `.nc` (xarray)
 
-Additional capabilities:
-
-* Metadata input and embedding
-* Axis reconstruction (`axis_0`, `axis_1`)
-* Fully client-side processing (no backend)
-
 ---
 
 ## Notes
