@@ -8,7 +8,7 @@ If any content is found to infringe intellectual property rights, please contact
 
 ---
 
-## Demo
+## Web
 
 ![screenshot](./docs/screenshot.png)
 
