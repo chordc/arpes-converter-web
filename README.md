@@ -1,4 +1,4 @@
-# ARPES Converter (Browser-Based)
+# ARPES Converter
 
 A lightweight, browser-based tool for ARPES data format conversion.
 
