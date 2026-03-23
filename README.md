@@ -10,7 +10,7 @@ If any content is found to infringe intellectual property rights, please contact
 
 ## Web
 
-![screenshot](./docs/screenshot.png)
+![screenshot](./docs/web_01.jpg)
 
 Live Demo: https://chordc.github.io/arpes-converter-web/
 
