@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NPZ / NetCDF Examples | ARPES Data Converter</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .example-layout {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 24px;
+      align-items: start;
+    }
+
+    .example-sidebar {
+      position: sticky;
+      top: 24px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--surface-muted);
+    }
+
+    .example-sidebar h3 {
+      margin: 0 0 12px;
+      font-size: 1rem;
+    }
+
+    .example-sidebar-nav {
+      display: grid;
+      gap: 8px;
+    }
+
+    .example-sidebar-nav a {
+      display: block;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #fff;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 0.92rem;
+      transition: 0.2s ease;
+    }
+
+    .example-sidebar-nav a:hover {
+      background: #f3f6fb;
+    }
+
+    .example-sidebar-nav a.active {
+      background: #eef6ff;
+      border-color: #b9d8ff;
+      color: #0b6bcb;
+      font-weight: 700;
+    }
+
+    .example-content {
+      min-width: 0;
+    }
+
+    .notebook-card,
+    .example-summary,
+    .example-tips {
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .notebook-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .notebook-cells {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .nb-cell {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--surface-muted);
+      overflow: hidden;
+      scroll-margin-top: 24px;
+    }
+
+    .nb-cell-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--line);
+      background: #eef2f7;
+    }
+
+    .nb-cell-title {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .nb-cell-kind {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text-soft);
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .nb-cell-body {
+      padding: 16px;
+      background: #fff;
+    }
+
+    .nb-cell-description {
+      margin: 0 0 12px;
+      color: var(--text-soft);
+      font-size: 0.95rem;
+    }
+
+    .code-wrap {
+      position: relative;
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 2;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #ffffff;
+      color: var(--text-soft);
+      padding: 6px 10px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .copy-btn:hover {
+      background: #f3f6fb;
+      color: var(--text);
+    }
+
+    .copy-btn.copied {
+      color: #0b6bcb;
+      border-color: #b9d8ff;
+      background: #eef6ff;
+    }
+
+    .code-block,
+    .output-block {
+      margin: 0;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      overflow: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .code-block {
+      background: #f8fafc;
+      color: var(--text);
+      padding-top: 48px;
+    }
+
+    .output-wrap {
+      margin-top: 12px;
+    }
+
+    .output-label {
+      margin: 0 0 8px;
+      color: var(--text-soft);
+      font-size: 0.84rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .output-block {
+      background: #fbfcfe;
+      color: var(--text-soft);
+    }
+
+    .summary-grid,
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .summary-item,
+    .tips-item {
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--surface-muted);
+    }
+
+    .summary-item h4,
+    .tips-item h4 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+    }
+
+    .summary-item p,
+    .tips-item p {
+      margin: 0;
+      color: var(--text-soft);
+    }
+
+    @media (max-width: 1100px) {
+      .example-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .example-sidebar {
+        position: static;
+      }
+    }
+
+    @media (max-width: 920px) {
+      .summary-grid,
+      .tips-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .notebook-card,
+      .example-summary,
+      .example-tips {
+        padding: 20px;
+      }
+
+      .nb-cell-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .copy-btn {
+        top: 8px;
+        right: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="site-shell">
+    <header class="site-header">
+      <div class="brand">
+        <a href="index.html" class="brand-link" aria-label="ARPES Data Converter home">
+          <div class="brand-icon" aria-label="Site logo">
+            <img src="logo.png" alt="ARPES Data Converter logo" />
+          </div>
+        </a>
+        <div class="brand-text">
+          <h1>ARPES Data Converter</h1>
+          <p class="site-tagline">
+            A lightweight web-based toolset for ARPES data utilities and browser-based workflows.
+          </p>
+        </div>
+      </div>
+
+      <nav class="top-nav" aria-label="Main navigation">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="index.html#tools" class="nav-link">Tools</a>
+        <a href="index.html#about" class="nav-link">About</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="page-intro">
+        <div class="page-intro-card">
+          <p class="section-label">Example</p>
+          <h2 class="page-title">NPZ / NetCDF Example Notebook</h2>
+          <p class="page-description">
+            This example page shows notebook-style workflows for inspecting an exported NPZ file
+            and loading a converted NetCDF file. It includes quick navigation on the left and
+            one-click copy for each code block.
+          </p>
+
+          <div class="page-intro-meta">
+            <span class="meta-pill">JSON</span>
+            <span class="meta-pill">NumPy</span>
+            <span class="meta-pill">xarray</span>
+            <span class="meta-pill">Matplotlib</span>
+          </div>
+
+          <div class="notebook-toolbar">
+            <a href="converter2.html" class="button button-secondary">Back to Converter</a>
+            <a href="index.html" class="button button-primary">Go to Home</a>
+          </div>
+        </div>
+      </section>
+
+      <div class="example-layout">
+        <aside class="example-sidebar">
+          <h3>On this page</h3>
+          <nav class="example-sidebar-nav" aria-label="Example contents">
+            <a href="#npz-1">NPZ · Load file</a>
+            <a href="#npz-2">NPZ · Show keys</a>
+            <a href="#npz-3">NPZ · Check shape</a>
+            <a href="#npz-4">NPZ · Inspect axes</a>
+            <a href="#npz-5">NPZ · Plot data</a>
+            <a href="#npz-6">NPZ · Read metadata</a>
+            <a href="#nc-1">NetCDF · Load .nc</a>
+            <a href="#nc-2">NetCDF · Inspect object</a>
+            <a href="#nc-3">NetCDF · Plot data</a>
+            <a href="#nc-4">NetCDF · Parse JSON attrs</a>
+            <a href="#summary">Summary</a>
+            <a href="#tips">Extension ideas</a>
+          </nav>
+        </aside>
+
+        <div class="example-content">
+          <section class="card notebook-card">
+            <div class="panel-header">
+              <h3>Example Code Cells</h3>
+              <p>Each section corresponds to a typical notebook step and supports one-click copying.</p>
+            </div>
+
+            <div class="notebook-cells">
+              <article class="nb-cell" id="npz-1">
+                <div class="nb-cell-header">
+                  <h4 class="nb-cell-title">Cell 1 · Load the NPZ file</h4>
+                  <span class="nb-cell-kind">NPZ</span>
+                </div>
+                <div class="nb-cell-body">
+                  <p class="nb-cell-description">
+                    Import NumPy and open the exported NPZ container.
+                  </p>
+                  <div class="code-wrap">
+                    <button class="copy-btn" type="button">Copy</button>
+                    <pre class="code-block"><code>import numpy as np
+import json
+
+dat = np.load("ibw_to_npz.npz", allow_pickle=False)</code></pre>
+                  </div>
+                </div>
+              </article>
+
+              <article class="nb-cell" id="npz-2">
+                <div class="nb-cell-header">
+                  <h4 class="nb-cell-title">Cell 2 · Show available keys</h4>
+                  <span class="nb-cell-kind">NPZ</span>
+                </div>
+                <div class="nb-cell-body">
+                  <p class="nb-cell-description">
+                    Inspect what arrays and metadata entries are stored in the file.
+                  </p>
+                  <div class="code-wrap">
+                    <button class="copy-btn" type="button">Copy</button>
+                    <pre class="code-block"><code>print(dat.files)</code></pre>
+                  </div>
+                  <div class="output-wrap">
+                    <p class="output-label">Expected output</p>
+                    <pre class="output-block">['data', 'axis_0', 'axis_1', 'meta_json']</pre>
+                  </div>
+                </div>
+              </article>
+
+              <article class="nb-cell" id="npz-3">
+                <div class="nb-cell-header">
+                  <h4 class="nb-cell-title">Cell 3 · Check the main data shape</h4>
+                  <span class="nb-cell-kind">NPZ</span>
+                </div>
+                <div class="nb-cell-body">
+                  <p class="nb-cell-description">
+                    Verify the dimensions of the ARPES intensity matrix before plotting.
+                  </p>
+                  <div class="code-wrap">
+                    <button class="copy-btn" type="button">Copy</button>
+                    <pre class="code-block"><code>print(dat["data"].shape)</code></pre>
+                  </div>
+                </div>
+              </article>
+
+              <article class="nb-cell" id="npz-4">
+                <div class="nb-cell-header">
+                  <h4 class="nb-cell-title">Cell 4 · Inspect axis arrays</h4>
+                  <span class="nb-cell-kind">NPZ</span>
+                </div>
+                <div class="nb-cell-body">
+                  <p class="nb-cell-description">
+                    Check axis length first, then inspect actual axis values.
+                  </p>
+                  <div class="code-wrap">
+                    <button class="copy-btn" type="button">Copy</button>
+                    <pre class="code-block"><code>print(dat["axis_0"].shape)
+print(dat["axis_1"])</code></pre>
+                  </div>
+                </div>
+              </article>
+
+              <article class="nb-cell" id="npz-5">
+                <div class="nb-cell-header">
+                  <h4 class="nb-cell-title">Cell 5 · Plot the data</h4>
+                  <span class="nb-cell-kind">NPZ</span>
+                </div>
+                <div class="nb-cell-body">
+                  <p class="nb-cell-description">
+                    Use the exported axes to define the image extent in a notebook plot.
+                  </p>
+                  <div class="code-wrap">
+                    <button class="copy-btn" type="button">Copy</button>
+                    <pre class="code-block"><code>import matplotlib.pyplot as plt
+
+plt.imshow(
+    dat["data"],
+    aspect="auto",
+    origin="lower",
+    extent=[
+        dat["axis_1"][0], dat["axis_1"][-1],
+        dat["axis_0"][0], dat["axis_0"][-1]
+    ]
+)
+plt.xlabel("Axis 1")
+plt.ylabel("Axis 0")
+plt.title("ARPES map from NPZ")
+plt.colorbar()
+plt.show()</code></pre>
+                  </div>
+                </div>
+              </article>
+
+              <article class="nb-cell" id="npz-6">
+                <div class="nb-cell-header">
+                  <h4 class="nb-cell-title">Cell 6 · Print metadata JSON</h4>
+                  <span class="nb-cell-kind">NPZ</span>
+                </div>
+                <div class="nb-cell-body">
+                  <p class="nb-cell-description">
+                    Read the metadata payload written during conversion.
+                  </p>
+                  <div class="code-wrap">
+                    <button class="copy-btn" type="button">Copy</button>
+                    <pre class="code-block"><code>meta = json.loads(dat["meta_json"].item())
+print(meta)</code></pre>
+                  </div>
+                </div>
+              </article>
+
+              <article class="nb-cell" id="nc-1">
+                <div class="nb-cell-header">
+                  <h4 class="nb-cell-title">Cell 7 · Load the .nc file</h4>
+                  <span class="nb-cell-kind">NetCDF</span>
+                </div>
+                <div class="nb-cell-body">
+                  <p class="nb-cell-description">
+                    Load the converted NetCDF file with xarray. If needed, set the engine explicitly.
+                  </p>
+                  <div class="code-wrap">
+                    <button class="copy-btn" type="button">Copy</button>
+                    <pre class="code-block"><code>import xarray as xr
+
+da = xr.open_dataarray("npz_to_xarray.nc", engine="scipy")</code></pre>
+                  </div>
+                </div>
+              </article>
+
+              <article class="nb-cell" id="nc-2">
+                <div class="nb-cell-header">
+                  <h4 class="nb-cell-title">Cell 8 · Inspect the xarray object</h4>
+                  <span class="nb-cell-kind">NetCDF</span>
+                </div>
+                <div class="nb-cell-body">
+                  <p class="nb-cell-description">
+                    Print the loaded DataArray and inspect dimensions, coordinates, and attributes.
+                  </p>
+                  <div class="code-wrap">
+                    <button class="copy-btn" type="button">Copy</button>
+                    <pre class="code-block"><code>print(da)
+print(da.dims)
+print(list(da.coords))
+print(da.attrs)</code></pre>
+                  </div>
+                </div>
+              </article>
+
+              <article class="nb-cell" id="nc-3">
+                <div class="nb-cell-header">
+                  <h4 class="nb-cell-title">Cell 9 · Plot the NetCDF data</h4>
+                  <span class="nb-cell-kind">NetCDF</span>
+                </div>
+                <div class="nb-cell-body">
+                  <p class="nb-cell-description">
+                    Plot the DataArray directly with xarray.
+                  </p>
+                  <div class="code-wrap">
+                    <button class="copy-btn" type="button">Copy</button>
+                    <pre class="code-block"><code>da.plot()</code></pre>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </section>
+
+
+              <article class="nb-cell" id="nc-4">
+                <div class="nb-cell-header">
+                  <h4 class="nb-cell-title">Cell 10 · Parse JSON-like attrs</h4>
+                  <span class="nb-cell-kind">NetCDF</span>
+                </div>
+                <div class="nb-cell-body">
+                  <p class="nb-cell-description">
+                    Some metadata fields may be stored as JSON strings in NetCDF attrs. Parse them when needed.
+                  </p>
+                  <div class="code-wrap">
+                    <button class="copy-btn" type="button">Copy</button>
+                    <pre class="code-block"><code>import json
+
+experiment = da.attrs.get("experiment", "")
+if experiment:
+    experiment = json.loads(experiment)
+
+print(experiment)</code></pre>
+                  </div>
+                </div>
+              </article>
+
+          <section class="card example-summary" id="summary">
+            <div class="panel-header">
+              <h3>What This Example Includes</h3>
+              <p>A quick mapping between NPZ contents, NetCDF loading, and notebook usage.</p>
+            </div>
+
+            <div class="summary-grid">
+              <div class="summary-item">
+                <h4>NPZ workflow</h4>
+                <p>Load arrays directly with NumPy, inspect shape, and read meta_json manually.</p>
+              </div>
+              <div class="summary-item">
+                <h4>NetCDF workflow</h4>
+                <p>Open the converted .nc file with xarray and work with labeled dimensions and coordinates.</p>
+              </div>
+              <div class="summary-item">
+                <h4>One-click reuse</h4>
+                <p>Each block supports copying so the page can serve as a quick notebook reference.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="card example-tips" id="tips">
+            <div class="panel-header">
+              <h3>Extension Ideas</h3>
+              <p>Practical directions for future example pages.</p>
+            </div>
+
+            <div class="tips-grid">
+              <div class="tips-item">
+                <h4>Add real outputs later</h4>
+                <p>You can replace placeholder outputs with values from your own test files.</p>
+              </div>
+              <div class="tips-item">
+                <h4>Add axis-aware plotting</h4>
+                <p>A later version can show examples that label plots automatically from xarray coordinates.</p>
+              </div>
+              <div class="tips-item">
+                <h4>Expand format examples</h4>
+                <p>The same notebook-cell structure can be reused for ITX, DA30 ZIP, or viewer examples.</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  
+  <script>
+    const navLinks = Array.from(document.querySelectorAll('.example-sidebar-nav a'));
+    const sections = navLinks
+      .map(link => document.querySelector(link.getAttribute('href')))
+      .filter(Boolean);
+
+    function setActiveLink() {
+      const offset = 120;
+      let currentId = sections[0]?.id || null;
+
+      sections.forEach((section) => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top - offset <= 0) {
+          currentId = section.id;
+        }
+      });
+
+      navLinks.forEach((link) => {
+        const isActive = link.getAttribute('href') === `#${currentId}`;
+        link.classList.toggle('active', isActive);
+      });
+    }
+
+    document.querySelectorAll('.copy-btn').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const code = button.parentElement.querySelector('code');
+        if (!code) return;
+
+        const text = code.innerText;
+        const original = button.textContent;
+
+        try {
+          await navigator.clipboard.writeText(text);
+          button.textContent = 'Copied';
+          button.classList.add('copied');
+          setTimeout(() => {
+            button.textContent = original;
+            button.classList.remove('copied');
+          }, 1400);
+        } catch (err) {
+          button.textContent = 'Failed';
+          setTimeout(() => {
+            button.textContent = original;
+          }, 1400);
+        }
+      });
+    });
+
+    setActiveLink();
+    window.addEventListener('scroll', setActiveLink, { passive: true });
+  </script>
+
+</body>
+</html>

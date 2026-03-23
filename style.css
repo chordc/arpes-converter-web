@@ -1,1 +1,101 @@
+:root {
+  --surface: #0f172a;
+  --text: #e5e7eb;
+  --text-soft: #94a3b8;
+  --line: #1f2937;
+}
 
+body {
+  margin: 0;
+  font-family: system-ui;
+  background: #020617;
+  color: var(--text);
+}
+
+.site-shell {
+  padding: 0 20px;
+}
+
+.site-header {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.card {
+  margin-top: 20px;
+  padding: 20px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+/* ACK STRIP FINAL */
+.ack-strip {
+  margin: 28px -20px 0;
+  padding: 0 20px;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.ack-strip-inner {
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 14px 0;
+}
+
+.ack-strip-label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+.ack-strip-list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ack-strip-list a {
+  position: relative;
+  color: var(--text);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 0 18px;
+  opacity: 0.9;
+}
+
+.ack-strip-list a:hover {
+  opacity: 1;
+}
+
+.ack-strip-list a + a::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #64748b;
+}
+
+@media (max-width: 640px) {
+  .ack-strip {
+    margin: 24px -14px 0;
+    padding: 0 14px;
+  }
+
+  .ack-strip-inner {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .ack-strip-list a {
+    padding: 0 12px;
+  }
+}

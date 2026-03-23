@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ARPES Data Converter</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    .workspace-panel {
+      display: grid;
+      gap: 16px;
+    }
+
+    .preview-workspace {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--surface-muted);
+    }
+
+    .preview-workspace-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .preview-workspace-title {
+      margin: 0 0 4px;
+      font-size: 1.02rem;
+    }
+
+    .preview-workspace-subtitle {
+      margin: 0;
+      color: var(--text-soft);
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .preview-state {
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      color: var(--text-soft);
+      line-height: 1.55;
+    }
+
+    .preview-plot-wrap,
+    .preview-viewer-wrap {
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+    }
+
+    .preview-viewer-wrap p {
+      margin: 0 0 12px;
+      color: var(--text-soft);
+    }
+
+    #previewCanvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-width: 100%;
+      border-radius: var(--radius-sm);
+      background: #ffffff;
+    }
+
+    @media (max-width: 640px) {
+      .preview-workspace-header {
+        flex-direction: column;
+      }
+    }
+  </style>
+
+</head>
+<body>
+  <div class="site-shell">
+    <header class="site-header">
+      <div class="brand">
+        <a href="index.html" class="brand-link" aria-label="ARPES Data Converter home">
+          <div class="brand-icon" aria-label="Site logo">
+            <img src="logo.png" alt="ARPES Data Converter logo" />
+          </div>
+        </a>
+        <div class="brand-text">
+          <h1>ARPES Data Converter</h1>
+          <p class="site-tagline">
+            A lightweight web-based toolset for ARPES data utilities and browser-based workflows.
+          </p>
+        </div>
+      </div>
+
+      <nav class="top-nav" aria-label="Main navigation">
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="index.html#tools" class="nav-link">Tools</a>
+        <a href="index.html#about" class="nav-link">About</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="page-intro">
+        <div class="page-intro-card">
+          <p class="section-label">Converter</p>
+          <h2 class="page-title">ARPES Data Converter</h2>
+          <p class="page-description">
+            Convert between multiple ARPES-related formats and NumPy-based data
+            structures directly in the browser. The first version is designed for
+            lightweight single-task conversion workflows.
+          </p>
+
+          <div class="page-intro-meta">
+            <span class="meta-pill">IBW</span>
+            <span class="meta-pill">ITX</span>
+            <span class="meta-pill">NPZ</span>
+            <span class="meta-pill">XARRAY</span>
+            <span class="meta-pill">PXT</span>
+            <span class="meta-pill">DA30 ZIP</span>
+            <span class="meta-pill">TOF FOLDER</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="converter-layout">
+        <article class="converter-panel card converter-input-card">
+          <div class="panel-header">
+            <h3>Upload &amp; Convert</h3>
+            <p>Select a source file or package, then choose the conversion path.</p>
+          </div>
+
+          <div class="workspace-panel">
+            <div class="upload-dropzone" id="uploadDropzone">
+              <div class="upload-dropzone-icon">
+                <img src="icon1.png" alt="Converter icon" />
+              </div>
+              <p class="upload-title">Choose a file or drag it here</p>
+              <p class="upload-subtitle">
+                Recommended for files up to 100 MB. Files larger than 100 MB may be slower. The hard upload limit is 1 GB.
+              </p>
+              <input type="file" id="fileInput" class="file-input-hidden" />
+              <button id="chooseFileBtn" type="button" class="button button-secondary">
+                Select File
+              </button>
+            </div>
+
+            <section id="previewWorkspace" class="preview-workspace" hidden>
+              <div class="preview-workspace-header">
+                <div>
+                  <h4 class="preview-workspace-title">Preview</h4>
+                  <p class="preview-workspace-subtitle">
+                    1D/2D outputs are shown.
+                  </p>
+                </div>
+                <button id="replaceFileBtn" type="button" class="button button-secondary">
+                  Replace File
+                </button>
+              </div>
+
+              <div id="previewState" class="preview-state">
+                No preview yet.
+              </div>
+
+              <div id="previewPlotWrap" class="preview-plot-wrap" hidden>
+                <canvas id="previewCanvas"></canvas>
+              </div>
+
+              <div id="previewViewerWrap" class="preview-viewer-wrap" hidden>
+                <p>This output is 3D. Open it in the dedicated viewer page.</p>
+                <a id="openViewerLink" class="button button-primary" href="viewer.html">
+                  Open in Viewer
+                </a>
+              </div>
+            </section>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="inputFormatSelect">Input format</label>
+              <select id="inputFormatSelect">
+                <option value="ibw">IBW</option>
+                <option value="itx">ITX</option>
+                <option value="pxt">PXT</option>
+                <option value="da30_zip">DA30 ZIP</option>
+                <option value="tof_folder">TOF Folder</option>
+                <option value="npz">NPZ</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="outputFormatSelect">Output format</label>
+              <select id="outputFormatSelect">
+                <option value="npz">NPZ</option>
+                <option value="xarray">XARRAY</option>
+              </select>
+            </div>
+          </div>
+
+          <details class="advanced-options">
+            <summary>Advanced Options (Optional)</summary>
+
+            <div class="advanced-options-body">
+              <div class="form-group">
+                <label for="axisLabelsInput">Axis labels</label>
+                <input
+                  type="text"
+                  id="axisLabelsInput"
+                  placeholder="e.g. energy, kx, ky"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="axisUnitsInput">Axis units</label>
+                <input
+                  type="text"
+                  id="axisUnitsInput"
+                  placeholder="e.g. eV, 1/A, 1/A"
+                />
+              </div>
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="experimentDateInput">Experiment date</label>
+                  <input
+                    type="date"
+                    id="experimentDateInput"
+                  />
+                </div>
+
+                
+              </div>
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="sampleNameInput">Sample name</label>
+                  <input
+                    type="text"
+                    id="sampleNameInput"
+                    placeholder="e.g. Bi2Se3"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="operatorInput">Operator</label>
+                  <input
+                    type="text"
+                    id="operatorInput"
+                    placeholder="e.g. Lara"
+                  />
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="locationInput">Location</label>
+                  <input
+                    type="text"
+                    id="locationInput"
+                    placeholder="e.g. Beamline 03U"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="hvInput">Photon Energy (eV)</label>
+                  <input
+                    type="number"
+                    step="any"
+                    id="hvInput"
+                    placeholder="e.g. 100"
+                  />
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="slitInput">Slit</label>
+                  <input
+                    type="text"
+                    id="slitInput"
+                    placeholder="e.g. 0.2"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="temperatureInput">Temperature (K)</label>
+                  <input
+                    type="number"
+                    step="any"
+                    id="temperatureInput"
+                    placeholder="e.g. 15"
+                  />
+                </div>
+              </div>
+
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="polarizationInput">Polarization</label>
+                  <select id="polarizationInput">
+                    <option value="">Select polarization</option>
+                    <option value="s">s</option>
+                    <option value="p">p</option>
+                    <option value="circular">circular</option>
+                    <option value="LH">LH</option>
+                    <option value="LV">LV</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="metadataModeSelect">Metadata handling</label>
+                  <select id="metadataModeSelect">
+                    <option value="preserve">Preserve metadata</option>
+                    <option value="minimal">Minimal metadata</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="notesInput">Notes</label>
+                <textarea
+                  id="notesInput"
+                  rows="3"
+                  placeholder="Optional notes"
+                ></textarea>
+              </div>
+
+              <div class="form-group">
+                <label for="outputNameInput">Output filename</label>
+                <input
+                  type="text"
+                  id="outputNameInput"
+                  placeholder="Optional custom output name"
+                />
+              </div>
+
+              <div class="form-group">
+                <label>Additional metadata</label>
+                <p class="advanced-helper-text">
+                  Add extra metadata fields as needed. Date and datetime fields support calendar pickers.
+                </p>
+              </div>
+
+              <div id="customMetadataList" class="custom-metadata-list"></div>
+
+              <div class="panel-actions advanced-actions">
+                <button id="addCustomMetadataBtn" type="button" class="button button-secondary">
+                  Add Metadata Field
+                </button>
+              </div>
+            </div></details>
+
+          <div class="panel-actions">
+            <button id="convertBtn" type="button" class="button button-primary">
+              Convert
+            </button>
+          </div>
+        </article>
+
+        <article class="converter-panel card converter-output-card">
+        <div class="panel-header">
+          <h3>Conversion Result</h3>
+          <p>Clear summary of the selected file, conversion result, and output metadata.</p>
+        </div>
+
+        <div class="result-status-card" id="resultStatusCard">
+          <div class="result-status-top">
+            <span class="result-badge" id="resultBadge">Idle</span>
+            <span class="result-status-text" id="resultStatusText">
+              Choose a file and click Convert.
+            </span>
+          </div>
+        </div>
+
+        <div class="result-section">
+          <h4>Selected File</h4>
+          <div class="result-grid">
+            <div class="result-item">
+              <span class="result-label">Filename</span>
+              <span class="result-value" id="resultFileName">—</span>
+            </div>
+            <div class="result-item">
+              <span class="result-label">Size</span>
+              <span class="result-value" id="resultFileSize">—</span>
+            </div>
+            <div class="result-item">
+              <span class="result-label">Input Format</span>
+              <span class="result-value" id="resultInputFormat">—</span>
+            </div>
+            <div class="result-item">
+              <span class="result-label">Output Format</span>
+              <span class="result-value" id="resultOutputFormat">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="result-section">
+          <h4>Output Summary</h4>
+          <div class="result-grid">
+            <div class="result-item">
+              <span class="result-label">Output File</span>
+              <span class="result-value" id="resultOutputName">—</span>
+            </div>
+            <div class="result-item">
+              <span class="result-label">Shape</span>
+              <span class="result-value" id="resultShape">—</span>
+            </div>
+            <div class="result-item">
+              <span class="result-label">Dtype</span>
+              <span class="result-value" id="resultDtype">—</span>
+            </div>
+            <div class="result-item">
+              <span class="result-label">Dimensions</span>
+              <span class="result-value" id="resultNdim">—</span>
+            </div>
+            <div class="result-item">
+              <span class="result-label">Axis Keys</span>
+              <span class="result-value" id="resultAxisKeys">—</span>
+            </div>
+            <div class="result-item">
+              <span class="result-label">Converter Path</span>
+              <span class="result-value" id="resultPath">—</span>
+            </div>
+          </div>
+        </div>
+
+        
+        <div class="download-block">
+          <a id="downloadLink" href="#" hidden class="button button-primary">
+            Download result
+          </a>
+        </div>
+
+        <details class="advanced-options technical-details">
+          <summary>Technical Details</summary>
+          <div class="advanced-options-body">
+            <div class="status-block">
+              <h4>Log</h4>
+              <pre id="logBox">Initializing...</pre>
+            </div>
+
+            <div class="status-block">
+              <h4>Raw Metadata</h4>
+              <pre id="metaBox">No output yet.</pre>
+            </div>
+          </div>
+        </details>
+      </article>
+      </section>
+      <section class="conversion-paths card">
+        <div class="panel-header">
+          <h3>Supported Conversion Paths</h3>
+          <p>Initial format routes planned for the first working version.</p>
+        </div>
+
+        <div class="path-grid">
+          <a class="path-pill" href="example_npz.html">IBW ↔ NPZ</a>
+          <a class="path-pill" href="example_npz.html">ITX ↔ NPZ</a>
+          <a class="path-pill" href="example_npz.html">PXT ↔ NPZ</a>
+          <a class="path-pill" href="example_npz.html">DA30 ZIP ↔ NPZ</a>
+          <div class="path-pill">TOF Folder ↔ NPZ</div>
+          <a class="path-pill" href="example_npz_examples_enhanced.html#nc-1">XARRAY ↔ NPZ</a>
+        </div>
+      </section>
+
+      <section class="converter-notes card">
+        <div class="panel-header">
+          <h3>How It Works</h3>
+        </div>
+
+        <div class="notes-grid">
+          <div class="note-item">
+            <h4>1. Upload Source Data</h4>
+            <p>
+              Choose an ARPES-related source file, archive, or prepared folder input.
+            </p>
+          </div>
+
+          <div class="note-item">
+            <h4>2. Select Formats</h4>
+            <p>
+              Pick the input and output formats for the desired conversion path.
+            </p>
+          </div>
+
+          <div class="note-item">
+            <h4>3. Convert &amp; Download</h4>
+            <p>
+              Run the conversion, inspect metadata, and download the converted result.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="converter-notes card">
+        <div class="ack-strip-inner">
+          <span class="ack-strip-label">
+            <h3>Built with</h3>
+            </span>
+          <div class="ack-strip-list">
+            <a href="https://pyodide.org/" target="_blank" rel="noopener noreferrer">Pyodide</a>
+            <a href="https://numpy.org/" target="_blank" rel="noopener noreferrer">NumPy</a>
+            <a href="https://docs.xarray.dev/" target="_blank" rel="noopener noreferrer">xarray</a>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/pyodide/v0.27.2/full/pyodide.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
