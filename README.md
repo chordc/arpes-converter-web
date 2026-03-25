@@ -11,11 +11,7 @@ If any content is found to infringe intellectual property rights, please contact
 ## Web
 
 
-Live Demo: https://chordc.github.io/arpes-converter-web/
-
-
-![Home](./docs/web_01.jpg)
-
+Live Demo: [https://chordc.github.io/arpes-converter-web/](https://chordc.github.io/arpes-converter-web/converter.html)
 
 ![ARPES Converter UI](./docs/web_02.jpg)
 
