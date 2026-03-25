@@ -1328,3 +1328,86 @@ async function handlePreview(file) {
     setLog(`Preview failed: ${error.message}`, false);
   }
 }
+
+/* ===== Logo auto-rotate + drag rotate ===== */
+function setupRotatingLogo() {
+  const logo = document.getElementById("site-logo");
+  const wrapper = document.querySelector(".logo-rotator");
+  if (!logo || !wrapper) return;
+
+  let angle = 0;
+  let autoSpeed = 0.15; // deg per frame
+  let isDragging = false;
+  let lastX = 0;
+  let velocity = 0;
+  let animationId = null;
+
+  function render() {
+    logo.style.transform = `rotate(${angle}deg)`;
+  }
+
+  function animate() {
+    if (!isDragging) {
+      angle += autoSpeed + velocity;
+      velocity *= 0.95; // 松手后的轻微惯性
+      if (Math.abs(velocity) < 0.001) velocity = 0;
+      render();
+    }
+    animationId = requestAnimationFrame(animate);
+  }
+
+  function onPointerDown(event) {
+    isDragging = true;
+    lastX = event.clientX;
+    wrapper.classList.add("is-dragging");
+    if (wrapper.setPointerCapture) {
+      wrapper.setPointerCapture(event.pointerId);
+    }
+  }
+
+  function onPointerMove(event) {
+    if (!isDragging) return;
+
+    const dx = event.clientX - lastX;
+    lastX = event.clientX;
+
+    angle += dx * 0.8;   // 拖动灵敏度
+    velocity = dx * 0.05;
+    render();
+  }
+
+  function onPointerUp(event) {
+    isDragging = false;
+    wrapper.classList.remove("is-dragging");
+    if (wrapper.releasePointerCapture) {
+      wrapper.releasePointerCapture(event.pointerId);
+    }
+  }
+
+  wrapper.addEventListener("pointerdown", onPointerDown);
+  wrapper.addEventListener("pointermove", onPointerMove);
+  wrapper.addEventListener("pointerup", onPointerUp);
+  wrapper.addEventListener("pointercancel", onPointerUp);
+  wrapper.addEventListener("lostpointercapture", onPointerUp);
+
+  logo.addEventListener("dragstart", (event) => {
+    event.preventDefault();
+  });
+
+  render();
+  animate();
+
+  // 可选：页面隐藏时暂停，回来再继续
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      if (animationId) {
+        cancelAnimationFrame(animationId);
+        animationId = null;
+      }
+    } else if (!animationId) {
+      animate();
+    }
+  });
+}
+
+document.addEventListener("DOMContentLoaded", setupRotatingLogo);

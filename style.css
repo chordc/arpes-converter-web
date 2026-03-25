@@ -970,3 +970,201 @@ img {
     font-size: 13px;
   }
 }
+
+/* ===== Language toggle button ===== */
+.lang-toggle {
+  appearance: none;
+  -webkit-appearance: none;
+  margin: 0;
+  padding: 10px 14px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-soft);
+  font: inherit;
+  line-height: 1.2;
+  text-decoration: none;
+  box-sizing: border-box;
+  display: inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.lang-toggle:hover,
+.lang-toggle:focus-visible {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--line);
+  outline: none;
+}
+
+.lang-toggle:active {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--line);
+  transform: none;
+}
+
+/* ===== Rotating logo ===== */
+.logo-rotator {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  user-select: none;
+}
+
+.logo-rotator:active {
+  cursor: grabbing;
+}
+
+.logo-rotator img {
+  display: block;
+  transform: rotate(0deg);
+  transform-origin: center center;
+  will-change: transform;
+  user-select: none;
+  pointer-events: auto;
+}
+
+.logo-rotator.is-dragging img {
+  transition: none;
+}
+
+/* ===== Animated night sky background ===== */
+body {
+  position: relative;
+  overflow-x: hidden;
+}
+
+.sky-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 92% 10%, rgba(10, 20, 40, 0.92), transparent 20%),
+    radial-gradient(circle at 86% 16%, rgba(8, 18, 36, 0.72), transparent 18%),
+    radial-gradient(circle at 98% 6%, rgba(16, 28, 52, 0.56), transparent 14%);
+}
+
+.stars {
+  position: absolute;
+  inset: 0;
+  opacity: 0.95;
+  background-image:
+    radial-gradient(2px 2px at 82% 6%, rgba(255,255,255,0.98), transparent 58%),
+    radial-gradient(1.5px 1.5px at 86% 10%, rgba(255,255,255,0.82), transparent 58%),
+    radial-gradient(2px 2px at 90% 8%, rgba(255,255,255,0.96), transparent 58%),
+    radial-gradient(2px 2px at 94% 12%, rgba(255,255,255,0.92), transparent 58%),
+    radial-gradient(1.5px 1.5px at 88% 16%, rgba(255,255,255,0.80), transparent 58%),
+    radial-gradient(2px 2px at 96% 18%, rgba(255,255,255,0.95), transparent 58%),
+    radial-gradient(1.5px 1.5px at 84% 20%, rgba(255,255,255,0.78), transparent 58%),
+    radial-gradient(2px 2px at 91% 22%, rgba(255,255,255,0.90), transparent 58%),
+    radial-gradient(1.5px 1.5px at 97% 24%, rgba(255,255,255,0.76), transparent 58%),
+    radial-gradient(2px 2px at 86% 28%, rgba(255,255,255,0.94), transparent 58%),
+    radial-gradient(1.5px 1.5px at 92% 30%, rgba(255,255,255,0.82), transparent 58%);
+  animation: star-twinkle 8s ease-in-out infinite alternate;
+}
+
+.stars::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.62;
+  background-image:
+    radial-gradient(1px 1px at 84% 8%, rgba(255,255,255,0.9), transparent 60%),
+    radial-gradient(1px 1px at 89% 14%, rgba(255,255,255,0.8), transparent 60%),
+    radial-gradient(1px 1px at 95% 18%, rgba(255,255,255,0.85), transparent 60%),
+    radial-gradient(1px 1px at 87% 22%, rgba(255,255,255,0.78), transparent 60%),
+    radial-gradient(1px 1px at 93% 26%, rgba(255,255,255,0.82), transparent 60%),
+    radial-gradient(1px 1px at 98% 12%, rgba(255,255,255,0.76), transparent 60%);
+  animation: star-twinkle 11s ease-in-out infinite alternate-reverse;
+}
+
+.meteor {
+  position: absolute;
+  top: -10%;
+  left: 110%;
+  width: 180px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0),
+    rgba(255,255,255,0.95),
+    rgba(150,190,255,0.0)
+  );
+  box-shadow:
+    0 0 10px rgba(255,255,255,0.5),
+    0 0 18px rgba(120,170,255,0.35);
+  transform: rotate(-25deg);
+  opacity: 0;
+}
+
+.meteor::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 0 14px rgba(180,210,255,0.7);
+}
+
+.meteor-1 {
+  top: 4%;
+  animation: meteor-fall 10s linear infinite;
+  animation-delay: 0s;
+}
+
+.meteor-2 {
+  top: 8%;
+  animation: meteor-fall 13s linear infinite;
+  animation-delay: 2.5s;
+}
+
+.meteor-3 {
+  top: 12%;
+  animation: meteor-fall 11s linear infinite;
+  animation-delay: 5.2s;
+}
+
+.meteor-4 {
+  top: 6%;
+  animation: meteor-fall 15s linear infinite;
+  animation-delay: 8s;
+}
+
+@keyframes meteor-fall {
+  0% {
+    transform: translate3d(0, 0, 0) rotate(-28deg);
+    opacity: 0;
+  }
+  6% {
+    opacity: 0.9;
+  }
+  22% {
+    transform: translate3d(-34vw, 18vh, 0) rotate(-28deg);
+    opacity: 0.9;
+  }
+  34% {
+    opacity: 0;
+  }
+  100% {
+    transform: translate3d(-60vw, 30vh, 0) rotate(-28deg);
+    opacity: 0;
+  }
+}
+
+.site-shell {
+  position: relative;
+  z-index: 1;
+}

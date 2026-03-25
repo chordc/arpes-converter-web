@@ -3,104 +3,160 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ARPES Data Converter</title>
-  <link rel="stylesheet" href="./style.css?v=2" />
+  <title>Chordc Tools</title>
+  <link rel="stylesheet" href="style.css" />
   <link rel="icon" type="image/png" href="logo.png" />
 </head>
 <body>
+  <div class="sky-bg" aria-hidden="true">
+    <div class="stars"></div>
+    <div class="meteor meteor-1"></div>
+    <div class="meteor meteor-2"></div>
+    <div class="meteor meteor-3"></div>
+    <div class="meteor meteor-4"></div>
+  </div>
+
   <div class="site-shell">
     <header class="site-header">
       <div class="brand">
-        <div class="brand-icon" aria-label="Site logo placeholder">
-          <!-- Placeholder for logo / icon -->
-          <img src="logo.png" alt="Online Data Viewer icon" />
+        <div class="brand-icon logo-rotator" aria-label="Site logo">
+          <img id="site-logo" src="logo.png" alt="chordc tools logo" draggable="false" />
         </div>
         <div class="brand-text">
-          <h1>ARPES Data Converter</h1>
-          <p class="site-tagline">
-            A lightweight web-based toolset for ARPES data utilities and browser-based workflows.
+          <h1 data-en="chordc tools" data-zh="chordc tools">chordc tools</h1>
+          <p
+            class="site-tagline"
+            data-en="A home for small and curious tools for scientific data and workflows."
+            data-zh="一个收集科学数据与工作流相关有趣小工具的小站。"
+          >
+            A home for small and curious tools for scientific data and workflows.
           </p>
         </div>
       </div>
 
       <nav class="top-nav" aria-label="Main navigation">
-        <a href="index.html" class="nav-link active">Home</a>
-        <a href="#tools" class="nav-link">Tools</a>
-        <a href="#about" class="nav-link">About</a>
+        <a href="index.html" class="nav-link active" data-en="Home" data-zh="首页">Home</a>
+        <a href="#tools" class="nav-link" data-en="Tools" data-zh="工具">Tools</a>
+        <a href="#about" class="nav-link" data-en="About" data-zh="关于">About</a>
+        <button id="lang-toggle" class="lang-toggle" type="button" aria-label="Switch language">
+          中文
+        </button>
       </nav>
     </header>
 
     <main>
       <section class="hero">
         <div class="hero-text">
-          <p class="eyebrow">ARPES Utilities</p>
-          <h2 class="hero-title">
-            Simple browser-based tools for ARPES data workflows.
+          <p class="eyebrow" data-en="Curious Tools" data-zh="有趣小工具">Curious Tools</p>
+
+          <h2
+            class="hero-title"
+            data-en="Small tools for scientific data and the workflows around it."
+            data-zh="面向科学数据以及相关工作流的小工具。"
+          >
+            Small tools for scientific data and the workflows around it.
           </h2>
-          <p class="hero-description">
-            This website is designed as a lightweight entry point for ARPES-related
-            web tools, including data conversion and online dataset viewing, with
-            a structure prepared for future expansion.
+
+          <p
+            class="hero-description"
+            data-en="A small collection of browser-based tools for working with scientific data, visualizing results, and simplifying the little workflow problems that come up along the way."
+            data-zh="这里收集了一些基于浏览器的小工具，用于处理科学数据、展示结果，并尽量简化研究过程中那些细碎却麻烦的工作流问题。"
+          >
+            A small collection of browser-based tools for working with scientific data,
+            visualizing results, and simplifying the little workflow problems that come
+            up along the way.
           </p>
 
           <div class="hero-actions">
-            <a href="#tools" class="button button-primary">Explore Tools</a>
+            <a
+              href="#tools"
+              class="button button-primary"
+              data-en="Explore Tools"
+              data-zh="查看工具"
+            >
+              Explore Tools
+            </a>
           </div>
         </div>
 
-        <div class="hero-illustration" aria-label="Illustration placeholder">
-          <!-- Placeholder for hero illustration -->
+        <div class="hero-illustration" aria-label="Illustration">
           <div class="illustration-box">
-            <img src="hero.png" alt="Abstract ARPES data workflow illustration" />
+            <img src="hero.png" alt="Abstract scientific data workflow illustration" />
           </div>
         </div>
       </section>
 
       <section class="section" id="tools">
         <div class="section-heading">
-          <p class="section-label">Directory</p>
-          <h3>Available Tools</h3>
-          <p class="section-description">
-            The homepage serves as an index for current and future ARPES web utilities.
+          <p class="section-label" data-en="Directory" data-zh="目录">Directory</p>
+          <h3 data-en="Available Tools" data-zh="可用工具">Available Tools</h3>
+          <p
+            class="section-description"
+            data-en="The homepage serves as an index for current and future tools."
+            data-zh="这个主页用来索引当前以及未来会加入的小工具。"
+          >
+            The homepage serves as an index for current and future tools.
           </p>
         </div>
 
         <div class="tool-grid">
           <article class="tool-card">
-            <div class="tool-card-icon" aria-label="Converter icon placeholder">
-              <!-- Placeholder for converter icon -->
-              <img src="icon1.png" alt="Online Data Viewer icon" />
+            <div class="tool-card-icon" aria-label="Converter icon">
+              <img src="icon1.png" alt="ARPES Data Converter icon" />
             </div>
 
             <div class="tool-card-body">
-              <h4>ARPES Data Converter</h4>
-              <p>
-                Convert ARPES data and Python arrays directly in the browser with a
-                lightweight and accessible web interface.
+              <h4 data-en="ARPES Data Converter" data-zh="ARPES 数据转换工具">
+                ARPES Data Converter
+              </h4>
+              <p
+                data-en="A browser-based tool for converting ARPES datasets and numerical arrays, designed for fast and accessible scientific workflows."
+                data-zh="一个基于浏览器的 ARPES 数据与数值数组转换工具，面向轻量、便捷的科学数据工作流。"
+              >
+                A browser-based tool for converting ARPES datasets and numerical arrays,
+                designed for fast and accessible scientific workflows.
               </p>
             </div>
 
             <div class="tool-card-footer">
-              <a href="converter.html" class="button button-primary">Open Tool</a>
+              <a
+                href="converter.html"
+                class="button button-primary"
+                data-en="Open Tool"
+                data-zh="打开工具"
+              >
+                Open Tool
+              </a>
             </div>
           </article>
 
           <article class="tool-card">
-            <div class="tool-card-icon" aria-label="Viewer icon placeholder">
-              <!-- Placeholder for viewer icon -->
+            <div class="tool-card-icon" aria-label="Viewer icon">
               <img src="icon2.png" alt="Online Data Viewer icon" />
             </div>
 
             <div class="tool-card-body">
-              <h4>Online Data Viewer</h4>
-              <p>
-                Explore ARPES-related datasets online, including 3D point clouds,
-                data slicing, and future interactive visualization tools.
+              <h4 data-en="Online Data Viewer" data-zh="在线数据查看器">
+                Online Data Viewer
+              </h4>
+              <p
+                data-en="Interactive exploration of scientific datasets, including ARPES data, 3D visualization, and future analysis tools."
+                data-zh="用于交互式查看科学数据集，包括 ARPES 数据、三维可视化以及后续的分析工具。"
+              >
+                Interactive exploration of scientific datasets, including ARPES data,
+                3D visualization, and future analysis tools.
               </p>
             </div>
 
             <div class="tool-card-footer">
-              <a href="viewer.html" class="button button-primary">Open Tool</a>
+              <a
+                href="viewer.html"
+                class="button button-primary"
+                data-en="Open Tool"
+                data-zh="打开工具"
+              >
+                Open Tool
+              </a>
             </div>
           </article>
         </div>
@@ -108,27 +164,126 @@
 
       <section class="section about-section" id="about">
         <div class="section-heading">
-          <p class="section-label">About</p>
-          <h3>Project Overview</h3>
+          <p class="section-label" data-en="About" data-zh="关于">About</p>
+          <h3 data-en="About chordc tools" data-zh="关于 chordc tools">
+            About chordc tools
+          </h3>
         </div>
 
         <div class="about-content">
-          <p>
-            ARPES Data Converter is intended to provide a clean and expandable
-            browser-based environment for lightweight ARPES data utilities.
+          <p
+            data-en="chordc tools is a personal collection of small tools for scientific data, visualization, and the workflows that grow around them."
+            data-zh="chordc tools 是一个个人小工具集合，围绕科学数据、结果可视化以及由此衍生出的各种工作流而逐步搭建。"
+          >
+            chordc tools is a personal collection of small tools for scientific data,
+            visualization, and the workflows that grow around them.
           </p>
-          <p>
-            The homepage serves as the central navigation page for multiple tools,
-            including data conversion and online dataset viewing, with room for
-            future expansion.
+
+          <p
+            data-en="It is very much a work in progress: some tools are still being polished, others are quietly taking shape. Feel free to explore and try a few along the way."
+            data-zh="这里仍在持续完善中：有些工具还在不断打磨，有些也正在慢慢成形。欢迎随便逛逛，也试试其中几个。"
+          >
+            It is very much a work in progress: some tools are still being polished,
+            others are quietly taking shape. Feel free to explore and try a few along the way.
           </p>
         </div>
       </section>
     </main>
 
     <footer class="site-footer">
-      <p>Built for lightweight ARPES web utilities.</p>
+      <p
+        data-en="Still loading — curious tools in progress."
+        data-zh="仍在加载中——有趣的小工具还在继续生长。"
+      >
+        Still loading — curious tools in progress.
+      </p>
     </footer>
   </div>
+
+  <script>
+    const toggleBtn = document.getElementById("lang-toggle");
+    const translatable = document.querySelectorAll("[data-en][data-zh]");
+
+    function setLanguage(lang) {
+      translatable.forEach((el) => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+      });
+
+      document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+      toggleBtn.textContent = lang === "zh" ? "English" : "中文";
+      localStorage.setItem("site-lang", lang);
+    }
+
+    const savedLang = localStorage.getItem("site-lang") || "en";
+    setLanguage(savedLang);
+
+    toggleBtn.addEventListener("click", () => {
+      const current = localStorage.getItem("site-lang") || "en";
+      setLanguage(current === "en" ? "zh" : "en");
+    });
+    (() => {
+    const logo = document.getElementById("site-logo");
+    const wrapper = document.querySelector(".logo-rotator");
+    if (!logo || !wrapper) return;
+
+    let angle = 0;
+    let autoSpeed = 0.30; // 自动旋转速度，单位：deg/frame
+    let isDragging = false;
+    let lastX = 0;
+    let velocity = 0;
+    let animationId = null;
+
+    function render() {
+      logo.style.transform = `rotate(${angle}deg)`;
+    }
+
+    function animate() {
+      if (!isDragging) {
+        angle += autoSpeed + velocity;
+        velocity *= 0.95; // 松手后保留一点惯性，再慢慢减弱
+        if (Math.abs(velocity) < 0.001) velocity = 0;
+        render();
+      }
+      animationId = requestAnimationFrame(animate);
+    }
+
+    function onPointerDown(e) {
+      isDragging = true;
+      lastX = e.clientX;
+      wrapper.classList.add("is-dragging");
+      wrapper.setPointerCapture?.(e.pointerId);
+    }
+
+    function onPointerMove(e) {
+      if (!isDragging) return;
+
+      const dx = e.clientX - lastX;
+      lastX = e.clientX;
+
+      angle += dx * 2.2;   // 拖动灵敏度
+      velocity = dx * 0.05;
+      render();
+    }
+
+    function onPointerUp(e) {
+      isDragging = false;
+      wrapper.classList.remove("is-dragging");
+      wrapper.releasePointerCapture?.(e.pointerId);
+    }
+
+    wrapper.addEventListener("pointerdown", onPointerDown);
+    wrapper.addEventListener("pointermove", onPointerMove);
+    wrapper.addEventListener("pointerup", onPointerUp);
+    wrapper.addEventListener("pointercancel", onPointerUp);
+    wrapper.addEventListener("lostpointercapture", onPointerUp);
+
+    // 防止图片被浏览器默认拖走
+    logo.addEventListener("dragstart", (e) => e.preventDefault());
+
+    render();
+    animate();
+  })();
+    </script>
 </body>
 </html>
+
