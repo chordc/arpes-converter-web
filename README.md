@@ -32,13 +32,12 @@ Live Demo: [https://chordc.github.io/arpes-converter-web/](https://chordc.github
 
 In this project, `.npz` is used as a lightweight format for datasets.
 
-A typical file follows the structure below:
-
+```python
 {
-    "data": np.ndarray,        # shape: (N_angle, N_energy) or higher dimensions
-    "axis_0": np.ndarray,      # e.g. angle, momentum, theta, or channel
-    "axis_1": np.ndarray,      # e.g. energy, phi, or other secondary axis
-    "axis_2": np.ndarray,      # optional, for 3D datasets such as DA30 ZIP bundles
+    "data": np.ndarray,
+    "axis_0": np.ndarray,
+    "axis_1": np.ndarray,
+    "axis_2": np.ndarray,   # optional
     "meta_json": {
         "format_version": "1.0",
         "source_format": str,
@@ -49,6 +48,7 @@ A typical file follows the structure below:
         "axis_units": list[str],
         "experiment": {
             "date": str,
+            "datetime": str,
             "location": str,
             "hv": float | str,
             "slit": str,
@@ -56,16 +56,14 @@ A typical file follows the structure below:
             "operator": str,
             "temperature_K": float | str,
             "photon_energy_eV": float | str,
+            "bias_voltage_V": float | str,
             "polarization": str,
             "notes": str
         },
-        "custom_metadata": dict,
-        "ibw_info": dict,      # optional, for IBW inputs
-        "itx_info": dict,      # optional, for ITX inputs
-        "pxt_info": dict,      # optional, for PXT inputs
-        "da30_info": dict      # optional, for DA30 ZIP inputs
+        "custom_metadata": dict
     }
 }
+```
 
 ---
 
