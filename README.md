@@ -2,9 +2,7 @@
 
 A lightweight, browser-based tool for ARPES data format conversion.
 
-This project was developed as a personal practice project for web interface design and scientific data handling.
-
-If any content is found to infringe intellectual property rights, please contact me and it will be removed promptly.
+This project was developed as a practice in web-based scientific tool design, with the goal of bridging experimental ARPES data and modern Python-based analysis workflows. As deep learning continues to demonstrate its effectiveness in scientific research, it has become increasingly important to transform experimental datasets stored in binary or text-based formats into structured, Python-friendly representations that can be directly loaded into neural network pipelines for downstream processing, analysis, and model development.
 
 ---
 
