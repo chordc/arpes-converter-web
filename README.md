@@ -26,6 +26,28 @@ Live Demo: [https://chordc.github.io/arpes-converter-web/](https://chordc.github
 
 ---
 
+## Input Data Formats
+
+This tool supports several commonly used ARPES data formats:
+
+* **`.ibw` (Igor Binary Wave)**
+  Binary data format used by Igor Pro for storing multidimensional scientific data.
+  https://www.wavemetrics.com/
+
+* **`.itx` (Igor Text Format)**
+  Text-based export format from Igor Pro, often used for data sharing and inspection.
+  https://www.wavemetrics.com/
+
+* **`.pxt` (Packed Igor Text/Binary)**
+  Igor Pro packed experiment format, which may contain multiple waves and metadata.
+  https://www.wavemetrics.com/
+
+* **DA30 `.zip` (Scienta Omicron Analyzer Output)**
+  Zipped data exported from DA30 analyzers, typically containing multidimensional ARPES datasets and metadata files.
+  https://scientaomicron.com/
+
+---
+
 ## NPZ Data Structure
 
 In this project, `.npz` is used as a lightweight format for datasets.
