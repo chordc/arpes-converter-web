@@ -65,6 +65,35 @@ In this project, `.npz` is used as a lightweight format for datasets.
 
 ---
 
+## Xarray / NetCDF Data Structure
+
+In this project, `.nc` is generated as an xarray-compatible `DataArray` for datasets.
+
+```python
+{
+    "name": "data",
+    "dims": [dim_0, dim_1, dim_2],   # e.g. axis_0, axis_1, axis_2
+    "coords": {
+        dim_0: np.ndarray,
+        dim_1: np.ndarray,
+        dim_2: np.ndarray   # optional
+    },
+    "attrs": {
+        "source_format": str,
+        "format_version": "1.0",
+        "data_shape": list[int],
+        "data_dtype": str,
+        "ndim": int,
+        "metadata_mode": str,
+        "experiment": dict,
+        "custom_metadata": dict
+    },
+    "values": np.ndarray
+}
+```
+
+---
+
 ## Notes
 
 * Recommended file size: ≤ 100 MB
