@@ -48,7 +48,6 @@ In this project, `.npz` is used as a lightweight format for datasets.
         "axis_units": list[str],
         "experiment": {
             "date": str,
-            "datetime": str,
             "location": str,
             "hv": float | str,
             "slit": str,
@@ -56,7 +55,6 @@ In this project, `.npz` is used as a lightweight format for datasets.
             "operator": str,
             "temperature_K": float | str,
             "photon_energy_eV": float | str,
-            "bias_voltage_V": float | str,
             "polarization": str,
             "notes": str
         },
